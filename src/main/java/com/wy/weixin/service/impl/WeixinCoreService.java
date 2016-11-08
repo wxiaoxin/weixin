@@ -4,6 +4,7 @@ import com.wy.weixin.constants.WeixinConfigConstant;
 import com.wy.weixin.constants.WeixinMessageConstant;
 import com.wy.weixin.model.TextMessage;
 import com.wy.weixin.service.IWeixinCoreService;
+import com.wy.weixin.util.Utils;
 import com.wy.weixin.util.XMLUtil;
 import org.dom4j.DocumentException;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,6 @@ import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class WeixinCoreService implements IWeixinCoreService {
         for(String s : arr) {
             sbf.append(s);
         }
-        String s = SHA1(sbf.toString());
+        String s = Utils.SHA1(sbf.toString());
 
         // 判断加密后字符串与请求中的字符串是否相等，并返回结果
         return s.equals(signature);
@@ -78,8 +77,9 @@ public class WeixinCoreService implements IWeixinCoreService {
                 case WeixinMessageConstant.TYPE_TEXT:
                     // 文本内容
                     String content = msgMap.get("Content");
-                    // 返回相同的内容
-                    message.setContenxt(content);
+                    // 处理文本消息，并获取返回内容
+                    String respContent = handleTextMsg(content);
+                    message.setContenxt(respContent);
                     result = XMLUtil.textMsgToXml(message);
                     break;
 
@@ -100,31 +100,25 @@ public class WeixinCoreService implements IWeixinCoreService {
         return result;
     }
 
-    /**
-     * SHA1加密算法
-     *
-     * @param decript   待加密的字符串
-     * @return          加密后的字符串
-     */
-    private static String SHA1(String decript) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.update(decript.getBytes());
-            byte messageDigest[] = digest.digest();
-            StringBuffer hexString = new StringBuffer();
-            for (int i = 0; i < messageDigest.length; i++) {
-                String shaHex = Integer.toHexString(messageDigest[i] & 0xFF);
-                if (shaHex.length() < 2) {
-                    hexString.append(0);
-                }
-                hexString.append(shaHex);
-            }
-            return hexString.toString();
 
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+    /**
+     * 处理文本消息
+     * @param content   用户发送的文本消息内容
+     * @return
+     */
+    private String handleTextMsg(String content) {
+        String respContent = "";
+
+        // TODO 业务逻辑
+        if(content.equals("模板")) {
+            // 回复模板消息
+
+
+
+        } else {
+            respContent = content;
         }
-        return "";
+        return respContent;
     }
 
 }
