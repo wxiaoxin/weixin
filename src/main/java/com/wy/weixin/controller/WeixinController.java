@@ -1,13 +1,17 @@
 package com.wy.weixin.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.wy.weixin.base.BaseController;
+import com.wy.weixin.model.User;
 import com.wy.weixin.service.IWeixinCoreService;
+import com.wy.weixin.service.IWeixinService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
 
 /**
  * Created by wxiao on 2016.11.8.
@@ -21,6 +25,9 @@ public class WeixinController extends BaseController {
 
     @Autowired
     private IWeixinCoreService weixinCoreService;
+
+    @Autowired
+    private IWeixinService weixinService;
 
 
     /**
@@ -49,8 +56,21 @@ public class WeixinController extends BaseController {
     @ResponseBody
     public String main() {
         String result = weixinCoreService.handleMsg(request, response);
-//        System.err.println(JSONObject.toJSONString(result));
         return result;
+    }
+
+
+    /**
+     * 微信授权回调处理
+     */
+    @RequestMapping("/authorize")
+    public ModelAndView authorize(String code, String state) {
+        Map<String, String> map = weixinService.getWebAuthToken(code);
+        User user = weixinService.getWebAuthUserInfo(map);
+        logger.debug(user);
+        ModelAndView mv = new ModelAndView("authorize");
+        mv.addObject("user", user);
+        return mv;
     }
 
 }

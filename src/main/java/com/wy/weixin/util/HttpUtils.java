@@ -1,5 +1,6 @@
 package com.wy.weixin.util;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -36,8 +37,14 @@ public class HttpUtils {
         response.close();
         client.close();
 
-        return EntityUtils.toString(respEntity);
+        return EntityUtils.toString(respEntity, "utf-8");
     }
+
+    public static JSONObject getJson(String url) throws IOException {
+        return JSONObject.parseObject(get(url));
+    }
+
+
 
     public static String post(String url, String param) throws IOException {
         CloseableHttpClient client = HttpClients.createDefault();
@@ -49,12 +56,16 @@ public class HttpUtils {
 
         CloseableHttpResponse response = client.execute(httpPost);
         HttpEntity respEntity = response.getEntity();
-        String result = EntityUtils.toString(respEntity);
+        String result = EntityUtils.toString(respEntity, "utf-8");
 
         response.close();
         client.close();
 
         return result;
+    }
+
+    public static JSONObject postJson(String url, String param) throws IOException {
+        return JSONObject.parseObject(post(url, param));
     }
 
 

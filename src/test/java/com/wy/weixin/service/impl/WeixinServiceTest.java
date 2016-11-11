@@ -5,8 +5,6 @@ import com.wy.weixin.service.IWeixinService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by wxiao on 2016/11/11.
  *

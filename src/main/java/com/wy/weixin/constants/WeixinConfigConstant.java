@@ -13,16 +13,20 @@ public class WeixinConfigConstant {
      */
     public static final String TOKEN = "WYWXTOKEN";
 
+    /**
+     * 网页授权回调地址
+     */
+    public static final String AUTH_REDIRECT_URI = "http://wxiaoxin.tunnel.qydev.com/weixin/authorize";
 
     /**
      * APPID 应用ID
      */
-    public static final String APPID1 = "wxcb43ae59e255208a";
+    public static final String _APPID = "wxcb43ae59e255208a";
 
     /**
      * AppSecret 应用密钥
      */
-    public static final String AppSECRET1 = "09ab31f393745e9af8fd45e40a2b42b6";
+    public static final String _AppSECRET = "09ab31f393745e9af8fd45e40a2b42b6";
 
 
     /**

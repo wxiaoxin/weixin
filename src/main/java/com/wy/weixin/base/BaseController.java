@@ -1,5 +1,6 @@
 package com.wy.weixin.base;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,8 @@ public class BaseController {
     protected HttpServletRequest request;
 
     protected HttpServletResponse response;
+
+    protected Logger logger = Logger.getLogger(getClass());
 
     @ModelAttribute
     protected void setReqAndResp(HttpServletRequest request, HttpServletResponse response) {
