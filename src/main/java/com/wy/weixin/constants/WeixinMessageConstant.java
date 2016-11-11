@@ -32,4 +32,13 @@ public class WeixinMessageConstant {
     // 事件
     public static final String TYPE_EVENT = "event";
 
+    // 订阅事件类型
+    public static final String EVENT_TYPE_SUBSCRIBE = "subscribe";
+
+    // 取消订阅事件类型
+    public static final String EVENT_TYPE_UNSUBSCRIBE = "unsubscribe";
+
+    // 扫描事件类型
+    public static final String EVENT_TYPE_SCAN= "SCAN";
+
 }

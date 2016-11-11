@@ -19,6 +19,8 @@ public class BuyTemplateMessage {
 
     private String template_id = TemplateMsgConstant.BUY_TM_ID;
 
+    private String url;
+
     private String topcolor;
 
     private Map data;
@@ -37,6 +39,14 @@ public class BuyTemplateMessage {
 
     public void setTemplate_id(String template_id) {
         this.template_id = template_id;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getTopcolor() {

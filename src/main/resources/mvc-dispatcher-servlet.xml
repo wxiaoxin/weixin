@@ -23,9 +23,6 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <!-- 静态资源 -->
-    <mvc:resources location="/resources/" mapping="/resources/**"/>
-
     <!-- 视图解析器 -->
     <bean name="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/views/"/>

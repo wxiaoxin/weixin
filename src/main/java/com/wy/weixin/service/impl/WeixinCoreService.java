@@ -3,10 +3,12 @@ package com.wy.weixin.service.impl;
 import com.wy.weixin.constants.WeixinConfigConstant;
 import com.wy.weixin.constants.WeixinMessageConstant;
 import com.wy.weixin.model.TextMessage;
+import com.wy.weixin.service.ITemplateMsgService;
 import com.wy.weixin.service.IWeixinCoreService;
 import com.wy.weixin.util.Utils;
 import com.wy.weixin.util.XMLUtil;
 import org.dom4j.DocumentException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletInputStream;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -25,6 +28,11 @@ import java.util.Map;
 
 @Service
 public class WeixinCoreService implements IWeixinCoreService {
+
+
+    /*模板消息服务*/
+    @Autowired
+    private ITemplateMsgService templateMsgService;
 
     public boolean checkSignature(HttpServletRequest request) {
         // signature 微信加密签名
@@ -42,7 +50,7 @@ public class WeixinCoreService implements IWeixinCoreService {
 
         // SHA1加密
         StringBuilder sbf = new StringBuilder();
-        for(String s : arr) {
+        for (String s : arr) {
             sbf.append(s);
         }
         String s = Utils.SHA1(sbf.toString());
@@ -64,6 +72,7 @@ public class WeixinCoreService implements IWeixinCoreService {
             String msgType = msgMap.get("MsgType");
             String msgId = msgMap.get("MsgId");
 
+
             // 响应文本消息
             TextMessage message = new TextMessage();
             message.setToUserName(fromUserName);
@@ -71,48 +80,55 @@ public class WeixinCoreService implements IWeixinCoreService {
             message.setCreateTime(String.valueOf(new Date().getTime()));
             message.setMsgType(WeixinMessageConstant.TYPE_TEXT);
 
-            switch (msgType) {
+            // 文本消息
+            if(msgType.equals(WeixinMessageConstant.TYPE_TEXT)) {
+                String content = msgMap.get("Content");
 
-                // 文本类型消息
-                case WeixinMessageConstant.TYPE_TEXT:
-                    // 文本内容
-                    String content = msgMap.get("Content");
-                    // 处理文本消息，并获取返回内容
-                    String respContent = handleTextMsg(content);
-                    message.setContenxt(respContent);
-                    result = XMLUtil.textMsgToXml(message);
-                    break;
+                if(content.equals("模板")) {
+                    Map<String,String> map = new HashMap<>();
+                    map.put("first", "话费充值提醒");
+                    map.put("keyword1", "15221505770");
+                    map.put("keyword2", "100");
+                    map.put("remark", "感谢使用在线充值！");
 
-                // 图片类型消息
-                case WeixinMessageConstant.TYPE_IMAGE:
-                    break;
-
-                default:
-
+                    templateMsgService.sendPhoneChargeTMsg(fromUserName, "http://www.baidu.com", map);
+                    message.setContenxt("已发送模板消息");
+                } else {
+                    message.setContenxt(content);
+                }
             }
 
+            if(msgType.equals(WeixinMessageConstant.TYPE_EVENT)) {
+                String event = msgMap.get("Event");
+                if(event.equals(WeixinMessageConstant.EVENT_TYPE_SUBSCRIBE)) {
+                    // 订阅事件
+                    message.setContenxt("感谢关注！");
+                }
+            }
+
+            result = XMLUtil.textMsgToXml(message);
+            return result;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-
-        return result;
+        return "";
     }
 
 
     /**
      * 处理文本消息
-     * @param content   用户发送的文本消息内容
+     *
+     * @param content 用户发送的文本消息内容
      * @return
      */
     private String handleTextMsg(String content) {
         String respContent = "";
 
         // TODO 业务逻辑
-        if(content.equals("模板")) {
+        if (content.equals("模板")) {
             // 回复模板消息
-
 
 
         } else {

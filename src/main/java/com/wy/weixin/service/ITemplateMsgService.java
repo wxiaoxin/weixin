@@ -15,6 +15,15 @@ public interface ITemplateMsgService {
      * @param touser    用户id
      * @param data      封装数据
      */
-    void sendMsg(String touser, Map<String, String> data);
+    void sendBuyTMsg(String touser, Map<String, String> data);
+
+
+    /**
+     * 发送充值话费成功模板消息
+     * @param touser
+     * @param url
+     * @param data
+     */
+    void sendPhoneChargeTMsg(String touser, String url, Map<String, String> data);
 
 }

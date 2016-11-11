@@ -11,8 +11,6 @@ public interface IWeixinService {
 
     /**
      * 获取AccessToken
-     * @param appid
-     * @param appscreat
      * @return
      */
     String getToken();

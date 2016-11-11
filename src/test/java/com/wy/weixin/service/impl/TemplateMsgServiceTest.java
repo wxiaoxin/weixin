@@ -1,5 +1,9 @@
 package com.wy.weixin.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.wy.weixin.BaseTest;
+import com.wy.weixin.model.BuyTemplateMessage;
 import com.wy.weixin.service.ITemplateMsgService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,9 +23,7 @@ import static org.junit.Assert.*;
  * 模板服务测试类
  */
 
-@ContextConfiguration("classpath:applicationContext.xml")
-@RunWith(SpringJUnit4ClassRunner.class)
-public class TemplateMsgServiceTest {
+public class TemplateMsgServiceTest extends BaseTest {
 
     @Autowired
     private ITemplateMsgService service;
@@ -36,7 +38,15 @@ public class TemplateMsgServiceTest {
         map.put("time", "2016-11-09");
         map.put("remark", "我们即将为您发货！祝您生活愉快！");
 
-        service.sendMsg("osZDJt8-g0HUflpZQeeFFIQMw17w", map);
+        BuyTemplateMessage message = new BuyTemplateMessage();
+        message.setTouser("aaaaa");
+        message.setTopcolor("#173177");
+        message.setUrl("http://www.baidu.com");
+        message.parseData(map);
+
+        System.out.println(JSONObject.toJSONString(message));
+
+
     }
 
 }

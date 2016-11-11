@@ -49,7 +49,7 @@ public class WeixinController extends BaseController {
     @ResponseBody
     public String main() {
         String result = weixinCoreService.handleMsg(request, response);
-        System.err.println(JSONObject.toJSONString(result));
+//        System.err.println(JSONObject.toJSONString(result));
         return result;
     }
 
