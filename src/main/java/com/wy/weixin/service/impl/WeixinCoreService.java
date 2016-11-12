@@ -2,6 +2,7 @@ package com.wy.weixin.service.impl;
 
 import com.wy.weixin.constants.WeixinConfigConstant;
 import com.wy.weixin.constants.WeixinMessageConstant;
+import com.wy.weixin.constants.WeixinUrlConstants;
 import com.wy.weixin.model.TextMessage;
 import com.wy.weixin.service.ITemplateMsgService;
 import com.wy.weixin.service.IWeixinCoreService;
@@ -93,6 +94,13 @@ public class WeixinCoreService implements IWeixinCoreService {
 
                     templateMsgService.sendPhoneChargeTMsg(fromUserName, "http://www.baidu.com", map);
                     message.setContenxt("已发送模板消息");
+                } else if(content.equals("授权")) {
+                    String url = WeixinUrlConstants.WEBAUTH_REDIRECT_URL
+                                    .replace("APPID", WeixinConfigConstant.APPID)
+                                    .replace("REDIRECT_URI", WeixinConfigConstant.AUTH_REDIRECT_URI)
+                                    .replace("STATE", "123");
+                    String respContent = "<a href=\"" + url + "\">授权</a>";
+                    message.setContenxt(respContent);
                 } else {
                     message.setContenxt(content);
                 }

@@ -34,10 +34,15 @@ public class WeixinUrlConstants {
 
     /**
      * 网页授权后拉取用户信息的请求地址
-     * 赋值：ACCSS_TOKEN OPENID
+     * 赋值：ACCESS_TOKEN OPENID
      */
     public static String GET_WEBAUTH_USERINFO_URL = "https://api.weixin.qq.com/sns/userinfo?access_token=ACCESS_TOKEN&openid=OPENID&lang=zh_CN";
 
+    /**
+     * 获取jsapi_ticket的请求地址
+     * 赋值：ACCESS_TOKEN
+     */
+    public static String GET_JSAPI_TICKET_URL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=ACCESS_TOKEN&type=jsapi";
 
     /**
      * 发送模板消息请求地址

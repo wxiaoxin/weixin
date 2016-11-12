@@ -1,6 +1,7 @@
 package com.wy.weixin.controller;
 
 import com.wy.weixin.base.BaseController;
+import com.wy.weixin.constants.WeixinConfigConstant;
 import com.wy.weixin.model.User;
 import com.wy.weixin.service.IWeixinCoreService;
 import com.wy.weixin.service.IWeixinService;
@@ -61,7 +62,7 @@ public class WeixinController extends BaseController {
 
 
     /**
-     * 微信授权回调处理
+     * 微信网页授权回调处理
      */
     @RequestMapping("/authorize")
     public ModelAndView authorize(String code, String state) {
@@ -70,6 +71,33 @@ public class WeixinController extends BaseController {
         logger.debug(user);
         ModelAndView mv = new ModelAndView("authorize");
         mv.addObject("user", user);
+        return mv;
+    }
+
+
+    /**
+     * 微信JSSDK测试
+     */
+    @RequestMapping("/share")
+    public ModelAndView share() {
+        // 当前地址
+        String url = "http://wxiaoxin.tunnel.qydev.com/weixin/share";
+        // 获取JSSDK签名
+        Map<String, String> map = weixinService.jsApiTicketSign(url);
+        String noncestr = map.get("noncestr");
+        String timestamp = map.get("timestamp");
+        String signature = map.get("signature");
+
+        ModelAndView mv = new ModelAndView("share");
+        mv.addObject("noncestr", noncestr);
+        mv.addObject("timestamp", timestamp);
+        mv.addObject("signature", signature);
+        mv.addObject("appId", WeixinConfigConstant.APPID);
+
+        logger.debug(noncestr);
+        logger.debug(timestamp);
+        logger.debug(signature);
+
         return mv;
     }
 

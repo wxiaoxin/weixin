@@ -29,7 +29,7 @@ public class RedisDao extends BaseDao implements IRedisDao {
     @Override
     public void set(String key, String value, long expires) {
         ValueOperations valueOp = redisTemplate.opsForValue();
-        valueOp.set(key, value, expires, TimeUnit.MINUTES);
+        valueOp.set(key, value, expires, TimeUnit.SECONDS);
     }
 
     @Override

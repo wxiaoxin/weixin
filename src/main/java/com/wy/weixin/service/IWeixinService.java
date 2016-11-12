@@ -20,6 +20,17 @@ public interface IWeixinService {
     String getToken();
 
     /**
+     * 获取jsapi_ticket
+     * @return          jsapi_ticket
+     */
+    String getJsApiTicket();
+
+    /**
+     * jsapi_ticket签名
+     */
+    Map<String, String> jsApiTicketSign(String url);
+
+    /**
      * 获取网页授权Token
      * @param code      授权回调的code
      */
