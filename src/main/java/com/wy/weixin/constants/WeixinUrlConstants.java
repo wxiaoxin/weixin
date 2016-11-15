@@ -51,6 +51,15 @@ public class WeixinUrlConstants {
     public static String POST_SEND_TM_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
 
 
+    /**
+     * 微信支付统一下单请求地址
+     */
+    public static String POST_PAY_UNIFIED_ORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
+    /**
+     * 微信支付订单查询请求地址
+     */
+
 
 
 }

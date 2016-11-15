@@ -21,7 +21,6 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping("/weixin")
 public class WeixinController extends BaseController {
 
     @Autowired
@@ -34,7 +33,7 @@ public class WeixinController extends BaseController {
     /**
      * 微信开发校验
      */
-    @RequestMapping(value = "main", method = RequestMethod.GET)
+    @RequestMapping(value = "/main", method = RequestMethod.GET)
     @ResponseBody
     public String index() {
 
@@ -84,21 +83,30 @@ public class WeixinController extends BaseController {
         String url = "http://wxiaoxin.tunnel.qydev.com/weixin/share";
         // 获取JSSDK签名
         Map<String, String> map = weixinService.jsApiTicketSign(url);
-        String noncestr = map.get("noncestr");
-        String timestamp = map.get("timestamp");
-        String signature = map.get("signature");
 
         ModelAndView mv = new ModelAndView("share");
-        mv.addObject("noncestr", noncestr);
-        mv.addObject("timestamp", timestamp);
-        mv.addObject("signature", signature);
+        mv.addObject("map", map);
         mv.addObject("appId", WeixinConfigConstant.APPID);
-
-        logger.debug(noncestr);
-        logger.debug(timestamp);
-        logger.debug(signature);
 
         return mv;
     }
+
+    /**
+     * 微信支付页面
+     * @return
+     */
+    @RequestMapping("/pay")
+    public String pay() {
+        // 当前地址
+        String url = "http://wxiaoxin.tunnel.qydev.com/weixin/pay";
+        // 获取JSSDK签名
+        Map<String, String> jssdkMap = weixinService.jsApiTicketSign(url);
+
+        // 获取支付签名
+
+
+        return "pay";
+    }
+
 
 }

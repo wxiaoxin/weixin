@@ -31,6 +31,11 @@ public interface IWeixinService {
     Map<String, String> jsApiTicketSign(String url);
 
     /**
+     * 微信支付签名
+     */
+    Map<String, String> paySign();
+
+    /**
      * 获取网页授权Token
      * @param code      授权回调的code
      */

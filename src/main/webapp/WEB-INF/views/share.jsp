@@ -23,9 +23,9 @@
     wx.config({
         debug: false,
         appId: "${appId}",
-        timestamp: "${timestamp}",
-        nonceStr: "${noncestr}",
-        signature: "${signature}",
+        timestamp: "${map.timestamp}",
+        nonceStr: "${map.noncestr}",
+        signature: "${map.signature}",
         jsApiList: ["scanQRCode","onMenuShareTimeline", "onMenuShareAppMessage", "chooseImage"]
     });
 

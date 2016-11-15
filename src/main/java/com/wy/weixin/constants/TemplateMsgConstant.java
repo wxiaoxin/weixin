@@ -8,8 +8,6 @@ package com.wy.weixin.constants;
 
 public class TemplateMsgConstant {
 
-
-
     /**
      * 购买通知模板消息ID
      */

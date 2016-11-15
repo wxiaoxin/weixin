@@ -9,6 +9,7 @@ import com.wy.weixin.model.User;
 import com.wy.weixin.service.IWeixinService;
 import com.wy.weixin.util.HttpUtils;
 import com.wy.weixin.util.Utils;
+import com.wy.weixin.util.XMLUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +59,7 @@ public class WeixinService extends BaseService implements IWeixinService {
     public String getJsApiTicket() {
         // 从redis缓存中取出jsapi_ticket
         String jsapi_ticket = redisDao.get("jsapi_ticket");
-        if(jsapi_ticket == null || jsapi_ticket.equals("")) {
+        if (jsapi_ticket == null || jsapi_ticket.equals("")) {
             // 如果redis取值失败，则请求微信接口重新获取
             String access_token = getToken();
             String url = WeixinUrlConstants.GET_JSAPI_TICKET_URL.replace("ACCESS_TOKEN", access_token);
@@ -107,11 +108,64 @@ public class WeixinService extends BaseService implements IWeixinService {
     }
 
     @Override
+    public Map<String, String> paySign() {
+        // 构建微信支付统一下单接口参数
+        // TODO 随机字符串
+        String nonce_str = "";
+        // TODO 签名
+        String sign = "";
+        // 商品描述
+        String body = "约惠商城-测试商品";
+        // TODO 商品详情
+        String detail = "";
+        // 附加数据
+        String attach = "";
+        // 商户订单号
+        String out_trade_no = "";
+        // 总金额
+        double total_fee = 0.1;
+        // 终端IP
+        String spbill_create_ip = "";
+        // 通知地址
+        String notify_url = "";
+        // 商品ID
+        String product_id = "";
+        // 用户标识
+        String openid = "";
+
+        Map<String, String> map = new HashMap<>();
+        // 公众号ID
+        map.put("appid", WeixinConfigConstant.APPID);
+        // 商户号ID
+        map.put("mch_id", WeixinConfigConstant.MCH_ID);
+        // 设备号
+        map.put("device_info", "WEB");
+        map.put("nonce_str", nonce_str);
+        map.put("sign", sign);
+        // 签名类型
+        map.put("sign_type", "MD5");
+        map.put("body", body);
+        map.put("attach", attach);
+        map.put("out_trade_no", out_trade_no);
+        map.put("total_fee", String.valueOf(total_fee));
+        map.put("spbill_create_ip", spbill_create_ip);
+        map.put("notify_url", notify_url);
+        // 交易类型
+        map.put("trade_type", "JSAPI");
+        map.put("product_id", product_id);
+        map.put("openid", openid);
+
+        String xmlParam = XMLUtil.mapToXml(map);
+
+        return null;
+    }
+
+    @Override
     public Map<String, String> getWebAuthToken(String code) {
         String url = WeixinUrlConstants.GET_WEBAUTH_TOKEN_URL
-                        .replace("APPID", WeixinConfigConstant.APPID)
-                        .replace("APPSECRET", WeixinConfigConstant.AppSECRET)
-                        .replace("CODE", code);
+                .replace("APPID", WeixinConfigConstant.APPID)
+                .replace("APPSECRET", WeixinConfigConstant.AppSECRET)
+                .replace("CODE", code);
         try {
             JSONObject resultJson = HttpUtils.getJson(url);
 
@@ -132,8 +186,8 @@ public class WeixinService extends BaseService implements IWeixinService {
     @Override
     public User getWebAuthUserInfo(String access_token, String openid) {
         String url = WeixinUrlConstants.GET_WEBAUTH_USERINFO_URL
-                        .replace("ACCESS_TOKEN", access_token)
-                        .replace("OPENID", openid);
+                .replace("ACCESS_TOKEN", access_token)
+                .replace("OPENID", openid);
         try {
             JSONObject resultJson = HttpUtils.getJson(url);
 

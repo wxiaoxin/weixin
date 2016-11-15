@@ -2,7 +2,7 @@ package com.wy.weixin.constants;
 
 /**
  * Created by wxiao on 2016.11.8.
- * <p>
+ *
  * 微信配置
  */
 
@@ -18,6 +18,33 @@ public class WeixinConfigConstant {
      */
     public static final String AUTH_REDIRECT_URI = "http://wxiaoxin.tunnel.qydev.com/weixin/authorize";
 
+
+    /**
+     * 约惠MALL appid
+     */
+    public static final String APPID = "wx2d89ad284ff97b14";
+
+    /**
+     * 约惠MALL
+     */
+    public static final String AppSECRET = "b160cdd147d92ea9bf46f084c8451d84";
+
+    /**
+     * 约惠MALL支付账号
+     */
+    public static final String MCH_ID = "1354281802";
+
+    /**
+     * 约惠MALL 支付scret
+     */
+    public static final String API_SECRET = "11fc888c8a194978b38fe6c2b90db61t";
+
+    /**
+     * 约惠MALL 微信支付证书密钥，默认为MCH_ID
+     */
+    public final static String KEYSTORE_PASSWORD = "1354281802";
+
+
     /**
      * APPID 应用ID
      */
@@ -32,12 +59,12 @@ public class WeixinConfigConstant {
     /**
      * 测试账号 appID
      */
-    public static final String APPID = "wx4fbca488bc2323f4";
+    public static final String __APPID = "wx4fbca488bc2323f4";
 
     /**
      * 测试账号 aapSecret
      */
-    public static final String AppSECRET = "495461a444fcab31376f6354b18f65c8";
+    public static final String __AppSECRET = "495461a444fcab31376f6354b18f65c8";
 
 
 }
