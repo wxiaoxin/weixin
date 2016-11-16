@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -44,7 +43,7 @@ public class WeixinService extends BaseService implements IWeixinService {
             // 如果redis取值失败，则请求微信接口重新获取
             String url = WeixinUrlConstants.GET_TOKEN_URL
                     .replace("APPID", WeixinConfigConstant.APPID)
-                    .replace("APPSECRET", WeixinConfigConstant.AppSECRET);
+                    .replace("APPSECRET", WeixinConfigConstant.APPSECRET);
             try {
                 JSONObject resultJson = HttpUtils.getJson(url);
                 // 取出access_token
@@ -191,7 +190,7 @@ public class WeixinService extends BaseService implements IWeixinService {
     public Map<String, String> getWebAuthToken(String code) {
         String url = WeixinUrlConstants.GET_WEBAUTH_TOKEN_URL
                 .replace("APPID", WeixinConfigConstant.APPID)
-                .replace("APPSECRET", WeixinConfigConstant.AppSECRET)
+                .replace("APPSECRET", WeixinConfigConstant.APPSECRET)
                 .replace("CODE", code);
         try {
             JSONObject resultJson = HttpUtils.getJson(url);

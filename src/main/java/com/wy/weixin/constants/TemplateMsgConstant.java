@@ -1,5 +1,7 @@
 package com.wy.weixin.constants;
 
+import org.springframework.beans.factory.annotation.Value;
+
 /**
  * Created by wxiao on 2016.11.8.
  *
@@ -11,22 +13,25 @@ public class TemplateMsgConstant {
     /**
      * 购买通知模板消息ID
      */
-    public static final String BUY_TM_ID = "cOnaAwnQOEx7ZbMCKFp5yj8YtqgOl0hDwuLfDNG39_g";
+    @Value("tempMsg.BUY_TM_ID")
+    public static String BUY_TM_ID;
 
     /**
      * 购买通知模板消息的字体颜色
      */
-    public static final String BUY_TM_COLOR = "#173177";
-
+    @Value("tempMsg.BUY_TM_COLOR")
+    public static String BUY_TM_COLOR;
 
     /**
      * 话费充值通知模板消息ID
      */
-    public static final String PHONE_CHARGE_TM_ID = "UuKm8HJQie9_awDWsYW0F4q0ZCN63vmaJZj5Ey4Bsvs";
+    @Value("${tempMsg.PHONE_CHARGE_TM_ID}")
+    public static String PHONE_CHARGE_TM_ID;
 
     /**
      * 话费充值通知模板消息的字体颜色
      */
-    public static final String PHONE_CHARGE_TM_COLOR = "#173177";
+    @Value("${tempMsg.PHONE_CHARGE_TM_COLOR}")
+    public static String PHONE_CHARGE_TM_COLOR;
 
 }

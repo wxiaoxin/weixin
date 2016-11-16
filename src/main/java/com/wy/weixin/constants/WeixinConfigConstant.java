@@ -1,5 +1,7 @@
 package com.wy.weixin.constants;
 
+import org.springframework.beans.factory.annotation.Value;
+
 /**
  * Created by wxiao on 2016.11.8.
  *
@@ -11,65 +13,50 @@ public class WeixinConfigConstant {
     /**
      * 自定义微信TOKEN
      */
-    public static final String TOKEN = "WYWXTOKEN";
+    @Value("${weixin.TOKEN}")
+    public static String TOKEN;
 
     /**
      * 网页授权回调地址
      */
-    public static final String AUTH_REDIRECT_URI = "http://wxiaoxin.tunnel.qydev.com/weixin/authorize";
-
+    @Value("${weixin.AUTH_REDIRECT_URI}")
+    public static String AUTH_REDIRECT_URI;
 
     /**
      * 约惠MALL appid
      */
-    public static final String APPID = "wx2d89ad284ff97b14";
+    @Value("${weixin.APPID}")
+    public static String APPID;
 
     /**
      * 约惠MALL
      */
-    public static final String AppSECRET = "b160cdd147d92ea9bf46f084c8451d84";
+    @Value("${weixin.APPSECRET}")
+    public static String APPSECRET;
 
     /**
      * 约惠MALL支付账号
      */
-    public static final String MCH_ID = "1354281802";
+    @Value("${weixin.MCH_ID}")
+    public static String MCH_ID;
 
     /**
      * 约惠MALL 支付scret
      */
-    public static final String API_SECRET = "11fc888c8a194978b38fe6c2b90db61t";
+    @Value("${weixin.PAY_SECRET}")
+    public static String PAY_SECRET;
 
     /**
      * 约惠MALL 微信支付证书密钥，默认为MCH_ID
      */
-    public static final String KEYSTORE_PASSWORD = "1354281802";
+    @Value("${weixin.KEYSTORE_PASSWORD}")
+    public static String KEYSTORE_PASSWORD;
 
     /**
      * 约惠MALL 支付key
      */
-    public static final String PAY_KEY = "11fc888c8a194978b38fe6c2b90db61t";
-
-
-    /**
-     * APPID 应用ID
-     */
-    public static final String _APPID = "wxcb43ae59e255208a";
-
-    /**
-     * AppSecret 应用密钥
-     */
-    public static final String _AppSECRET = "09ab31f393745e9af8fd45e40a2b42b6";
-
-
-    /**
-     * 测试账号 appID
-     */
-    public static final String __APPID = "wx4fbca488bc2323f4";
-
-    /**
-     * 测试账号 aapSecret
-     */
-    public static final String __AppSECRET = "495461a444fcab31376f6354b18f65c8";
+    @Value("${weixin.PAY_KEY}")
+    public static String PAY_KEY;
 
 
 }

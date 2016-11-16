@@ -103,9 +103,40 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <package.env>dev</package.env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <package.env>prod</package.env>
+            </properties>
+        </profile>
+    </profiles>
+    
     <build>
         <finalName>weixin</finalName>
 
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>dev/*</exclude>
+                    <exclude>prod/*</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources/${package.env}</directory>
+            </resource>
+        </resources>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
