@@ -9,13 +9,18 @@ import com.wy.weixin.model.User;
 import com.wy.weixin.service.IWeixinService;
 import com.wy.weixin.util.HttpUtils;
 import com.wy.weixin.util.Utils;
+import com.wy.weixin.util.WeixinUtils;
 import com.wy.weixin.util.XMLUtil;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
 
 /**
  * Created by wxiao on 2016.11.8.
@@ -25,6 +30,8 @@ import java.util.Map;
 
 @Service
 public class WeixinService extends BaseService implements IWeixinService {
+
+    private static final DecimalFormat DF = new DecimalFormat("#");
 
     @Autowired
     private IRedisDao redisDao;
@@ -87,7 +94,7 @@ public class WeixinService extends BaseService implements IWeixinService {
         // jsapi_ticket
         String jsApiTicket = getJsApiTicket();
         // 随机字符串
-        String noncestr = "wy";
+        String noncestr = Utils.nonceStr();
         // 时间戳
         String timestamp = String.valueOf(System.currentTimeMillis());
         // 按照字段名称进行字典排序，后采用URL键值对的形式拼接字符串
@@ -108,55 +115,75 @@ public class WeixinService extends BaseService implements IWeixinService {
     }
 
     @Override
-    public Map<String, String> paySign() {
+    public Map<String, String> paySign(Map<String, String> paramMap) {
         // 构建微信支付统一下单接口参数
-        // TODO 随机字符串
-        String nonce_str = "";
-        // TODO 签名
-        String sign = "";
-        // 商品描述
-        String body = "约惠商城-测试商品";
-        // TODO 商品详情
-        String detail = "";
-        // 附加数据
-        String attach = "";
-        // 商户订单号
-        String out_trade_no = "";
-        // 总金额
-        double total_fee = 0.1;
-        // 终端IP
-        String spbill_create_ip = "";
-        // 通知地址
-        String notify_url = "";
-        // 商品ID
-        String product_id = "";
-        // 用户标识
-        String openid = "";
-
-        Map<String, String> map = new HashMap<>();
+        SortedMap<String, String> map = new TreeMap<>();
         // 公众号ID
         map.put("appid", WeixinConfigConstant.APPID);
         // 商户号ID
         map.put("mch_id", WeixinConfigConstant.MCH_ID);
         // 设备号
         map.put("device_info", "WEB");
-        map.put("nonce_str", nonce_str);
-        map.put("sign", sign);
+        // 随机字符串
+        map.put("nonce_str", Utils.nonceStr());
         // 签名类型
         map.put("sign_type", "MD5");
-        map.put("body", body);
-        map.put("attach", attach);
-        map.put("out_trade_no", out_trade_no);
-        map.put("total_fee", String.valueOf(total_fee));
-        map.put("spbill_create_ip", spbill_create_ip);
-        map.put("notify_url", notify_url);
+        // 商品描述
+        map.put("body", paramMap.get("body"));
+        // 附加信息
+        map.put("attach", paramMap.get("attach"));
+        // 订单号
+        map.put("out_trade_no", Utils.randomUUID());
+        // 总金额
+        map.put("total_fee", paramMap.get("totalFee"));
+        // ip地址
+        map.put("spbill_create_ip", paramMap.get("ip"));
+        // 交易通知回调地址
+        map.put("notify_url", paramMap.get("notifyUrl"));
         // 交易类型
         map.put("trade_type", "JSAPI");
-        map.put("product_id", product_id);
-        map.put("openid", openid);
+        // 商品id
+        map.put("product_id", paramMap.get("productId"));
+        // 用户id
+        map.put("openid", paramMap.get("openId"));
+        // 参数签名
+        String sign = WeixinUtils.sign(map);
+        map.put("sign", sign);
 
+        // map转xml格式
         String xmlParam = XMLUtil.mapToXml(map);
-
+        try {
+            // 请求微信统一支付接口
+            String result = HttpUtils.post(WeixinUrlConstants.POST_PAY_UNIFIED_ORDER_URL, xmlParam);
+            InputStream is = new ByteArrayInputStream(result.getBytes("utf-8"));
+            // 解析xml格式为map
+            Map<String, String> resultMap = XMLUtil.xmlISToMap(is);
+            String returnCode = resultMap.get("return_code");   //SUCCESS
+            String resultCode = resultMap.get("result_code");     //OK
+            if (returnCode.equals("SUCCESS") && resultCode.equals("SUCCESS")) {
+                SortedMap<String, String> paySignMap = new TreeMap<>();
+                paySignMap.put("appId", WeixinConfigConstant.APPID);
+                paySignMap.put("timeStamp", String.valueOf(System.currentTimeMillis()));
+                paySignMap.put("nonceStr", Utils.nonceStr());
+                paySignMap.put("package", "prepay_id=" + resultMap.get("prepay_id"));
+                paySignMap.put("signType", "MD5");
+                // 签名
+                paySignMap.put("paySign", WeixinUtils.sign(paySignMap));
+                // 解决java关键字package的问题
+                paySignMap.put("packagee", "prepay_id=" + resultMap.get("prepay_id"));
+                // 返回微信支付签名
+                return paySignMap;
+            } else {
+                logger.error("获取微信支付签名失败！");
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error("获取微信支付签名失败！");
+        } catch (DocumentException e) {
+            e.printStackTrace();
+            logger.error("获取微信支付签名失败！");
+        }
         return null;
     }
 

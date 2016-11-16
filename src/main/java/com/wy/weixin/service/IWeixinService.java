@@ -33,7 +33,7 @@ public interface IWeixinService {
     /**
      * 微信支付签名
      */
-    Map<String, String> paySign();
+    Map<String, String> paySign(Map<String, String> paramMap);
 
     /**
      * 获取网页授权Token

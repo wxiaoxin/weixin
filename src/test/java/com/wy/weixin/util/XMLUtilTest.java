@@ -20,11 +20,11 @@ public class XMLUtilTest {
     @Test
     public void mapToXml() throws Exception {
 
-        Map<String, String> map = new HashMap<>();
-        map.put("a", "a");
-        map.put("b", "b");
-        String s = XMLUtil.mapToXml(map);
-        System.out.println(s);
+//        Map<String, String> map = new HashMap<>();
+//        map.put("a", "a");
+//        map.put("b", "b");
+//        String s = XMLUtil.mapToXml(map);
+//        System.out.println(s);
 
     }
 

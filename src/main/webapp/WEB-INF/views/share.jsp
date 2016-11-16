@@ -21,7 +21,7 @@
 
     <%-- 微信配置 --%>
     wx.config({
-        debug: false,
+        debug: true,
         appId: "${appId}",
         timestamp: "${map.timestamp}",
         nonceStr: "${map.noncestr}",

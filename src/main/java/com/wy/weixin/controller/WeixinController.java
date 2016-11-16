@@ -5,6 +5,7 @@ import com.wy.weixin.constants.WeixinConfigConstant;
 import com.wy.weixin.model.User;
 import com.wy.weixin.service.IWeixinCoreService;
 import com.wy.weixin.service.IWeixinService;
+import com.wy.weixin.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -96,17 +98,45 @@ public class WeixinController extends BaseController {
      * @return
      */
     @RequestMapping("/pay")
-    public String pay() {
+    public ModelAndView pay(String userOpenId) {
         // 当前地址
-        String url = "http://wxiaoxin.tunnel.qydev.com/weixin/pay";
+        String url = "http://wxiaoxin.tunnel.qydev.com/weixin/pay?userOpenId=" + userOpenId;
+        // 支付回调地址
+        String urlBack = "http://wxiaoxin.tunnel.qydev.com/weixin/payback";
+
         // 获取JSSDK签名
         Map<String, String> jssdkMap = weixinService.jsApiTicketSign(url);
+        logger.debug(jssdkMap);
 
-        // 获取支付签名
+        // 微信支付提交参数
+        Map<String, String> map = new HashMap<>();
+        map.put("body", "约惠商城-测试商品");
+        map.put("attach", "附加信息");
+        map.put("totalFee", "1234");
+        map.put("ip", Utils.getIPAddress(request));
+        map.put("notifyUrl", urlBack);
+        map.put("productId", "123456");
+        map.put("openId", userOpenId);
 
+        // 微信支付签名
+        Map<String, String> paySignMap = weixinService.paySign(map);
+        logger.debug(paySignMap);
 
-        return "pay";
+        ModelAndView mv = new ModelAndView("pay");
+        mv.addObject("jssdkMap", jssdkMap);
+        mv.addObject("paySignMap", paySignMap);
+        mv.addObject("appId", WeixinConfigConstant.APPID);
+        return mv;
     }
 
+    /**
+     * 支付回调
+     * @return
+     */
+    @RequestMapping("/payback")
+    @ResponseBody
+    public String payBack() {
+        return "支付回调";
+    }
 
 }

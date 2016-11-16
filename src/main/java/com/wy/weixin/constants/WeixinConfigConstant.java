@@ -42,7 +42,12 @@ public class WeixinConfigConstant {
     /**
      * 约惠MALL 微信支付证书密钥，默认为MCH_ID
      */
-    public final static String KEYSTORE_PASSWORD = "1354281802";
+    public static final String KEYSTORE_PASSWORD = "1354281802";
+
+    /**
+     * 约惠MALL 支付key
+     */
+    public static final String PAY_KEY = "11fc888c8a194978b38fe6c2b90db61t";
 
 
     /**

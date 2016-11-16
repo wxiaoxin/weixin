@@ -15,10 +15,7 @@ import org.dom4j.io.SAXReader;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by wxiao on 2016.11.8.
@@ -50,20 +47,6 @@ public class XMLUtil {
         return map;
     }
 
-
-    /**
-     * map对象转xml字符串
-     *
-     * @param map
-     * @return
-     */
-    public static String mapToXml(Map map) {
-        XStream xStream = new XStream(new DomDriver());
-        xStream.alias("xml", Map.class);
-        xStream.registerConverter(new MapEntryConverter());
-        return xStream.toXML(map);
-    }
-
     /**
      * 对象转xml
      *
@@ -77,6 +60,48 @@ public class XMLUtil {
     }
 
 
+    /**
+     * map对象转xml字符串
+     *
+     * @param map
+     * @return
+     */
+    public static String mapToXml(SortedMap map) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("<xml>");
+        Iterator it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            String k = (String) entry.getKey();
+            String v = (String) entry.getValue();
+            if ("sign".equalsIgnoreCase(k)) {
+                continue;
+            }
+            if ("detail".equalsIgnoreCase(k)) {
+                sb.append("<" + k + ">" + "<![CDATA[" + v + "]]></" + k + ">");
+            } else {
+                sb.append("<" + k + ">" + v + "</" + k + ">");
+            }
+        }
+        sb.append("<sign>" + map.get("sign") + "</sign>");
+        sb.append("</xml>");
+        return sb.toString();
+    }
+
+    /**
+     * map对象转xml字符串
+     *
+     * @param map
+     * @return
+     */
+    public static String mapToXml2(TreeMap map) {
+        XStream xStream = new XStream(new DomDriver());
+        xStream.alias("xml", TreeMap.class);
+        xStream.registerConverter(new MapEntryConverter());
+        return xStream.toXML(map);
+    }
+
+
     public static class MapEntryConverter implements Converter {
 
         public boolean canConvert(Class clazz) {
@@ -84,7 +109,6 @@ public class XMLUtil {
         }
 
         public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
-
             AbstractMap map = (AbstractMap) value;
             for (Object obj : map.entrySet()) {
                 Map.Entry entry = (Map.Entry) obj;
@@ -95,23 +119,17 @@ public class XMLUtil {
                 }
                 writer.endNode();
             }
-
         }
 
         public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-
-            Map<String, String> map = new HashMap<String, String>();
-
+            Map<String, String> map = new HashMap<>();
             while (reader.hasMoreChildren()) {
                 reader.moveDown();
-
-                String key = reader.getNodeName(); // nodeName aka element's name
+                String key = reader.getNodeName();
                 String value = reader.getValue();
                 map.put(key, value);
-
                 reader.moveUp();
             }
-
             return map;
         }
 

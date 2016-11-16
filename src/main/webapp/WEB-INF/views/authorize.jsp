@@ -22,5 +22,7 @@
 
 <input type="text" value="${user.city}">
 
+<a href="pay?userOpenId=${user.openid}">购买页</a>
+
 </body>
 </html>
