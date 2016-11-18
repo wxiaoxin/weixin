@@ -133,7 +133,10 @@
                 </excludes>
             </resource>
             <resource>
-                <directory>src/main/resources/${package.env}</directory>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>${package.env}/*</include>
+                </includes>
             </resource>
         </resources>
         
